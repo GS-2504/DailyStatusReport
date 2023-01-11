@@ -28,5 +28,14 @@ namespace DailyReportWeb_Api.Model
             public string UserId { get; set; }
             [ForeignKey("UserId")]
             public virtual ApplicationUser ApplicationUser { get; set; }
+            public enum Status { Pending, Approved, Disapproved }
+            public Status UserStatus { get; set; } = Status.Pending;
+
+
+
+
+
+
+
     }
 }

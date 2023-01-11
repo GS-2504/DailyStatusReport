@@ -1,0 +1,47 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav mr-auto">
+    </ul>
+      <button class="btn btn-success">SignUp</button>&nbsp;&nbsp;
+      <button class="btn btn-danger" data-toggle="modal" data-target="#loginModal">SignIn<i class="fa fa-sign-in" aria-hidden="true"></i></button>
+  </div>
+</nav>
+
+<!-- loginModal -->
+<div class="modal" role="dialog" id="loginModal" >
+  <form>
+  <div class="modal-dialog">
+      <div class="modal-content">
+          <!-- header -->
+          <div class="modal-header">
+              <div class="modal-title text-center">Login</div>
+              <button class="close" data-dismiss="modal" type="button"><span>&times;</span></button>
+          </div>
+          <div class="modal-body">
+              
+                  <div class="form-group row">
+                      <label for="txtemail" class="col-sm-4">Email</label> 
+                      <div class="col-sm-8">
+                        <input type="text" name="email" placeholder="Enter Email" class="form-control" id="txtemail" >
+                      </div>
+              </div>
+              <div class="form-group row">
+                  <label for="password" class="col-sm-4">Password</label> 
+                  <div class="col-sm-8">
+                    <input type="password" name="password" placeholder="Enter Your Password" class="form-control" id="password" >
+                  </div>
+              </div>
+             
+          </div>
+             <!-- footer -->
+             <div class="modal-footer">
+              <div>
+                <a href="#" >Forgot Password?</a>
+              </div>
+              <button  class="btn btn-info" data-dismiss="modal">Login</button>
+             <button class="btn btn-danger" data-dismiss="modal">Cancel</button>
+             </div>
+      </div>
+  </div>
+</form>
+</div>
