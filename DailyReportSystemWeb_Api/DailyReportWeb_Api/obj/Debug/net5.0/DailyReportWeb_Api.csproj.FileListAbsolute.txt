@@ -64,3 +64,15 @@ D:\CS Assignment\DailyReportSystem\DailyReportSystemWeb_Api\DailyReportWeb_Api\o
 D:\CS Assignment\DailyReportSystem\DailyReportSystemWeb_Api\DailyReportWeb_Api\obj\Debug\net5.0\ref\DailyReportWeb_Api.dll
 D:\CS Assignment\DailyReportSystem\DailyReportSystemWeb_Api\DailyReportWeb_Api\obj\Debug\net5.0\DailyReportWeb_Api.pdb
 D:\CS Assignment\DailyReportSystem\DailyReportSystemWeb_Api\DailyReportWeb_Api\obj\Debug\net5.0\DailyReportWeb_Api.genruntimeconfig.cache
+D:\CS Assignment\DailyReportSystem\DailyReportSystemWeb_Api\DailyReportWeb_Api\bin\Debug\net5.0\DailyReportWeb_Api.StaticWebAssets.xml
+D:\CS Assignment\DailyReportSystem\DailyReportSystemWeb_Api\DailyReportWeb_Api\bin\Debug\net5.0\Microsoft.AspNetCore.Identity.UI.Views.V4.dll
+D:\CS Assignment\DailyReportSystem\DailyReportSystemWeb_Api\DailyReportWeb_Api\bin\Debug\net5.0\Microsoft.AspNetCore.Identity.UI.dll
+D:\CS Assignment\DailyReportSystem\DailyReportSystemWeb_Api\DailyReportWeb_Api\bin\Debug\net5.0\Microsoft.Extensions.FileProviders.Embedded.dll
+D:\CS Assignment\DailyReportSystem\DailyReportSystemWeb_Api\DailyReportWeb_Api\bin\Debug\net5.0\MimeKit.dll
+D:\CS Assignment\DailyReportSystem\DailyReportSystemWeb_Api\DailyReportWeb_Api\bin\Debug\net5.0\BouncyCastle.Crypto.dll
+D:\CS Assignment\DailyReportSystem\DailyReportSystemWeb_Api\DailyReportWeb_Api\bin\Debug\net5.0\System.Formats.Asn1.dll
+D:\CS Assignment\DailyReportSystem\DailyReportSystemWeb_Api\DailyReportWeb_Api\bin\Debug\net5.0\System.Runtime.CompilerServices.Unsafe.dll
+D:\CS Assignment\DailyReportSystem\DailyReportSystemWeb_Api\DailyReportWeb_Api\bin\Debug\net5.0\System.Security.Cryptography.Pkcs.dll
+D:\CS Assignment\DailyReportSystem\DailyReportSystemWeb_Api\DailyReportWeb_Api\bin\Debug\net5.0\System.Text.Encoding.CodePages.dll
+D:\CS Assignment\DailyReportSystem\DailyReportSystemWeb_Api\DailyReportWeb_Api\bin\Debug\net5.0\runtimes\win\lib\netcoreapp3.1\System.Security.Cryptography.Pkcs.dll
+D:\CS Assignment\DailyReportSystem\DailyReportSystemWeb_Api\DailyReportWeb_Api\bin\Debug\net5.0\runtimes\win\lib\netcoreapp3.1\System.Text.Encoding.CodePages.dll

@@ -48,6 +48,10 @@
               "target": "Package",
               "version": "[5.0.17, )"
             },
+            "Microsoft.AspNetCore.Identity.UI": {
+              "target": "Package",
+              "version": "[5.0.17, )"
+            },
             "Microsoft.EntityFrameworkCore": {
               "target": "Package",
               "version": "[5.0.17, )"
@@ -61,6 +65,10 @@
               "suppressParent": "All",
               "target": "Package",
               "version": "[5.0.17, )"
+            },
+            "MimeKit": {
+              "target": "Package",
+              "version": "[3.4.3, )"
             },
             "Swashbuckle.AspNetCore": {
               "target": "Package",

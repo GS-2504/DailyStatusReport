@@ -8,5 +8,6 @@ namespace DailyReportWeb_Api.Identity
 {
     public class ApplicationRole: IdentityRole
     {
+        
     }
 }
