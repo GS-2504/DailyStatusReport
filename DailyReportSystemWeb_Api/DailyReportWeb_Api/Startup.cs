@@ -71,16 +71,6 @@ namespace DailyReportWeb_Api
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "DailyReportWeb_Api v1"));
             }
-           // IServiceScopeFactory serviceScopeFactory = app.ApplicationServices.
-           //GetRequiredService<IServiceScopeFactory>();
-           // using (IServiceScope scope = serviceScopeFactory.CreateScope())
-           // {
-           //     var roleManager = scope.ServiceProvider.GetRequiredService
-           //         <RoleManager<ApplicationRole>>();
-           //     var userManager = scope.ServiceProvider.GetRequiredService
-           //         <UserManager<ApplicationUser>>();
-           // }
-           
             app.UseHttpsRedirection();
             app.UseRouting();
             app.UseAuthentication();

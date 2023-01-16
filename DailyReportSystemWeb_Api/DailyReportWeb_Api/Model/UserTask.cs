@@ -24,7 +24,8 @@ namespace DailyReportWeb_Api.Model
             public string Obstacle { get; set; }
             [Required]
             public string NextDayPlan { get; set; }
-            public bool IsDeleted { get; set; } = false;
+            public bool IsDeleted { get; set; } 
+            = false;
             public string UserId { get; set; }
             [ForeignKey("UserId")]
             public virtual ApplicationUser ApplicationUser { get; set; }

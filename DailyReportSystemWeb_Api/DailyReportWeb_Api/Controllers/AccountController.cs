@@ -22,20 +22,20 @@ namespace DailyReportWeb_Api.Controllers
     public class AccountController : ControllerBase
     {
         private readonly UserManager<ApplicationUser> _userManager;
-        private readonly SignInManager<ApplicationUser> _signInManager;
-        private readonly ApplicationRoleManager _applicationRoleManager;
+        private readonly RoleManager<ApplicationRole> _roleManager;
+        private readonly SignInManager<ApplicationRoleManager> _signInManager;
         private readonly IEmailSender _emailSender;
         private IWebHostEnvironment _env;
-        public AccountController(UserManager<ApplicationUser> userManager,SignInManager<ApplicationUser> signInManager,
-           ApplicationRoleManager applicationRoleManager, IEmailSender emailSender, IWebHostEnvironment env)
+        public AccountController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationRoleManager> signInManager
+           ,RoleManager<ApplicationRole> roleManager, IEmailSender emailSender, IWebHostEnvironment env)
         {
             _userManager = userManager;
-            _signInManager = signInManager;
-            _applicationRoleManager = applicationRoleManager;
+            _roleManager = roleManager;
             _emailSender = emailSender;
+            _signInManager = signInManager;
             _env = env;
         }
-        [HttpGet]
+        [NonAction]
         public async Task<IActionResult> ConfirmEmail(string userId, string code)
         {
             var user = await _userManager.FindByIdAsync(userId);
@@ -50,11 +50,10 @@ namespace DailyReportWeb_Api.Controllers
                 throw new InvalidOperationException($"Error confirming email for user with ID '{userId}':");
             }
 
-            return null;
+            return Ok();
         }
 
        [HttpPost("RegisterUser")]
-      // [ValidateAntiForgeryToken]
        public async Task<IActionResult> RegisterUser([FromBody]UserSignUp model)
         {
             if (!ModelState.IsValid) return BadRequest();
@@ -66,33 +65,33 @@ namespace DailyReportWeb_Api.Controllers
             var result =await _userManager.CreateAsync(applicationUser, model.Password);
             if (result.Succeeded)
             {   
-                if (!await _applicationRoleManager.RoleExistsAsync(SD.Role_Admin))
+                if (!await _roleManager.RoleExistsAsync(SD.Role_Admin))
                 {
                     var role = new ApplicationRole();
                     role.Name = SD.Role_Admin;
-                    await _applicationRoleManager.CreateAsync(role);
+                    await  _roleManager.CreateAsync(role);
+                    await _userManager.AddToRoleAsync(applicationUser,SD.Role_Admin);
                 }
-                if (!await _applicationRoleManager.RoleExistsAsync(SD.Role_Organization))
-                {
-                    var role = new ApplicationRole();
-                    role.Name = SD.Role_Organization;
-
-                    await _applicationRoleManager.CreateAsync(role);
-                }
-                if (!await _applicationRoleManager.RoleExistsAsync(SD.Role_TeamLeader))
-                {
-                    var role = new ApplicationRole();
-                    role.Name = SD.Role_TeamLeader;
-
-                    await _applicationRoleManager.CreateAsync(role);
-                }
-                if (!await _applicationRoleManager.RoleExistsAsync(SD.Role_User))
-                {
-                    var role = new ApplicationRole();
-                    role.Name = SD.Role_User;
-
-                    await _applicationRoleManager.CreateAsync(role);
-                }
+                //if (!await _roleManager.RoleExistsAsync(SD.Role_Organization))
+                //{
+                //    var role = new ApplicationRole();
+                //    role.Name = SD.Role_Organization;
+                //    await _roleManager.CreateAsync(role);
+                //    await _userManager.AddToRoleAsync(applicationUser, SD.Role_Organization);
+                //}
+                //if (!await _roleManager.RoleExistsAsync(SD.Role_TeamLeader))
+                //{
+                //    var role = new ApplicationRole();
+                //    role.Name = SD.Role_TeamLeader;
+                //    await _roleManager.CreateAsync(role);
+                //    await _userManager.AddToRoleAsync(applicationUser, SD.Role_TeamLeader);
+                //}
+                //if (!await _roleManager.RoleExistsAsync(SD.Role_User))
+                //{
+                //    var role = new ApplicationRole();
+                //    role.Name = SD.Role_User;
+                //    await _roleManager.CreateAsync(role);
+                //}
                 if (model.Role == null)
                 {
                     await _userManager.AddToRoleAsync(applicationUser, SD.Role_User);
@@ -104,7 +103,6 @@ namespace DailyReportWeb_Api.Controllers
                 var code = await _userManager.GenerateEmailConfirmationTokenAsync(applicationUser);
                 code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
                 var callbackUrl = Url.Action(nameof(ConfirmEmail), "Account", new { userId = applicationUser.Id, code = code }, protocol: HttpContext.Request.Scheme);
-                
                 var pathToFile = _env.ContentRootPath + Path.DirectorySeparatorChar.ToString() + "Templates"
                            + Path.DirectorySeparatorChar.ToString()
                            + "EmailTemplate"
@@ -128,7 +126,18 @@ namespace DailyReportWeb_Api.Controllers
                         );
                 await _emailSender.SendEmailAsync(model.Email, subject, messageBody);
             }
-                  return Ok();
+                       return Ok();
+        }
+        [HttpPost("UserSignIn")]
+       public async Task<IActionResult> UserSignIn([FromBody]UserSignIn userSignIn)
+        {
+            if (!ModelState.IsValid) return BadRequest();
+            var result =  await _signInManager.PasswordSignInAsync(userSignIn.Email, userSignIn.Password, false, false);
+            if (result.Succeeded)
+            {
+                return Ok();
+            }
+            return Ok();
         }
     }
 }
