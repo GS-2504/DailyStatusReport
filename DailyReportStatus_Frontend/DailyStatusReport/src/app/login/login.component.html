@@ -1,1 +1,37 @@
-
+<div class="container col-4">
+<form [formGroup]="loginForm">
+    <!-- Email input -->
+    <div class="form-outline mb-4">
+      <label class="form-label" for="emailaddress">Email address</label>
+      <input type="email" formControlName="email" id="emailaddress" placeholder="Enter Your Email" class="form-control" />
+      <div>
+        <span *ngIf="loginForm.get('email')?.invalid && loginForm.get('email')?.touched" class="text-danger">Email is required and must be a valid email address.</span>
+    </div>
+    </div>
+    <!-- Password input -->
+    <div class="form-outline mb-4">
+      <label class="form-label" for="password">Password</label>
+      <input type="password" formControlName="password" id="password" placeholder="Enter Your Password" class="form-control" />
+      <div>
+        <span *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched" class="text-danger">Password is required and must be at least 8 characters long.</span>
+      </div>
+    </div>
+    <!-- 2 column grid layout for inline styling -->
+    
+  
+    <!-- Submit button -->
+    <button type="button" class="btn btn-primary btn-block mb-4">Sign in</button>
+  
+    <!-- Register buttons -->
+    <div class="text-center">
+      <p>Not a member? <a href="signup">Register</a></p>
+      <div class="row mb-4">
+        <div class="col">
+          <!-- Simple link -->
+          <a href="">Forgot password?</a>
+        </div>
+      </div>
+    </div>
+   
+  </form>
+</div>

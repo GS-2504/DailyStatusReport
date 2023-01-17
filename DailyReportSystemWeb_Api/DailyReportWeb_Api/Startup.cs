@@ -1,5 +1,6 @@
 using DailyReportWeb_Api.Identity;
 using DailyReportWeb_Api.Utility;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -11,10 +12,12 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace DailyReportWeb_Api
@@ -35,11 +38,6 @@ namespace DailyReportWeb_Api
                 b => b.MigrationsAssembly("DailyReportWeb_Api")));
             //services.AddControllers();
             services.Configure<EmailSettings>(Configuration.GetSection("EmailSettings"));
-            //identity framwork DI
-            //  services.AddDefaultIdentity<ApplicationUser>()
-            //    .AddRoles<IdentityRole>()
-            //.AddEntityFrameworkStores<ApplicationDbContext>();
-           // services.AddScoped<RoleManager<IdentityRole>>();
             services.AddTransient<IEmailSender, EmailSender>();
             services.AddTransient<IRoleStore<ApplicationRole>, ApplicationRoleStore>();
             services.AddTransient<UserManager<ApplicationUser>, ApplicationUserManager>();
@@ -59,6 +57,28 @@ namespace DailyReportWeb_Api
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "DailyReportWeb_Api", Version = "v1" });
+            });
+
+            //JWT Configuration
+            var appSettingSection = Configuration.GetSection("AppSettings");
+            services.Configure<AppSettings>(appSettingSection);
+            var appSettings = appSettingSection.Get<AppSettings>();
+            var key = Encoding.ASCII.GetBytes(appSettings.Secretkey);
+            services.AddAuthentication(X =>
+            {
+                X.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                X.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(X =>
+            {
+                X.RequireHttpsMetadata = false;
+                X.SaveToken = true; X.TokenValidationParameters = new TokenValidationParameters()
+                {
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(key)
+,
+                    ValidateIssuer = false,
+                    ValidateAudience = false
+                };
             });
         }
 

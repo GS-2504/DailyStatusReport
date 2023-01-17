@@ -27,7 +27,6 @@ D:\CS Assignment\DailyReportSystem\DailyReportSystemWeb_Api\DailyReportWeb_Api\b
 D:\CS Assignment\DailyReportSystem\DailyReportSystemWeb_Api\DailyReportWeb_Api\bin\Debug\net5.0\Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
 D:\CS Assignment\DailyReportSystem\DailyReportSystemWeb_Api\DailyReportWeb_Api\bin\Debug\net5.0\Microsoft.IdentityModel.Tokens.dll
 D:\CS Assignment\DailyReportSystem\DailyReportSystemWeb_Api\DailyReportWeb_Api\bin\Debug\net5.0\Microsoft.OpenApi.dll
-D:\CS Assignment\DailyReportSystem\DailyReportSystemWeb_Api\DailyReportWeb_Api\bin\Debug\net5.0\Newtonsoft.Json.dll
 D:\CS Assignment\DailyReportSystem\DailyReportSystemWeb_Api\DailyReportWeb_Api\bin\Debug\net5.0\Swashbuckle.AspNetCore.Swagger.dll
 D:\CS Assignment\DailyReportSystem\DailyReportSystemWeb_Api\DailyReportWeb_Api\bin\Debug\net5.0\Swashbuckle.AspNetCore.SwaggerGen.dll
 D:\CS Assignment\DailyReportSystem\DailyReportSystemWeb_Api\DailyReportWeb_Api\bin\Debug\net5.0\Swashbuckle.AspNetCore.SwaggerUI.dll
@@ -76,3 +75,4 @@ D:\CS Assignment\DailyReportSystem\DailyReportSystemWeb_Api\DailyReportWeb_Api\b
 D:\CS Assignment\DailyReportSystem\DailyReportSystemWeb_Api\DailyReportWeb_Api\bin\Debug\net5.0\System.Text.Encoding.CodePages.dll
 D:\CS Assignment\DailyReportSystem\DailyReportSystemWeb_Api\DailyReportWeb_Api\bin\Debug\net5.0\runtimes\win\lib\netcoreapp3.1\System.Security.Cryptography.Pkcs.dll
 D:\CS Assignment\DailyReportSystem\DailyReportSystemWeb_Api\DailyReportWeb_Api\bin\Debug\net5.0\runtimes\win\lib\netcoreapp3.1\System.Text.Encoding.CodePages.dll
+D:\CS Assignment\DailyReportSystem\DailyReportSystemWeb_Api\DailyReportWeb_Api\bin\Debug\net5.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll

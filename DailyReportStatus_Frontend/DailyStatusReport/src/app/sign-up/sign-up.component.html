@@ -1,0 +1,33 @@
+<div class="container col-4">
+    <form [formGroup]="signUpform">
+        <!-- Name input -->
+        <div class="form-outline mb-4">
+            <label class="form-label" for="name">Name</label>
+            <input type="email" formControlName="name" id="name" placeholder="Enter Your Name" class="form-control" />
+            <div>
+              <span *ngIf="signUpform.get('name')?.invalid && signUpform.get('name')?.touched" class="text-danger">Name is Required</span>
+          </div>
+          </div>
+        <!-- Email input -->
+        <div class="form-outline mb-4">
+          <label class="form-label" for="emailaddress">Email address</label>
+          <input type="email" formControlName="email" id="emailaddress" placeholder="Enter Your Email" class="form-control" />
+          <div>
+            <span *ngIf="signUpform.get('email')?.invalid && signUpform.get('email')?.touched" class="text-danger">Email is required and must be a valid email address.</span>
+        </div>
+        </div>
+        <!-- Password input -->
+        <div class="form-outline mb-4">
+          <label class="form-label" for="password">Password</label>
+          <input type="password" formControlName="password" id="password" placeholder="Enter Your Password" class="form-control" />
+          <div>
+            <span *ngIf="signUpform.get('password')?.invalid && signUpform.get('password')?.touched" class="text-danger">Password is required and must be at least 8 characters long.</span>
+          </div>
+        </div>
+        <!-- 2 column grid layout for inline styling -->
+        
+      
+        <!-- Submit button -->
+        <button type="button" class="btn btn-primary btn-block mb-4">Sign Up</button>
+      </form>
+    </div>
