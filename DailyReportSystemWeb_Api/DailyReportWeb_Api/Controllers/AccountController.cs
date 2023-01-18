@@ -154,17 +154,20 @@ namespace DailyReportWeb_Api.Controllers
                     {
                         Subject = new ClaimsIdentity(new Claim[]
                         {
-                    new Claim(ClaimTypes.Name, user.Id),
-                    new Claim(ClaimTypes.Email, user.Email),
-                    new Claim(ClaimTypes.Role,user.Role)
+                          new Claim(ClaimTypes.Name, user.UserName),
+                          new Claim(ClaimTypes.Email, user.Email),
+                          new Claim(ClaimTypes.Role,user.Role)
                         }),
-                        Expires = DateTime.UtcNow.AddDays(7),
-                        SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key)
-    ,
+                        Expires = DateTime.UtcNow.AddHours(1),
+                        SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key),
                         SecurityAlgorithms.HmacSha256Signature)
                     };
                     var token = tokenhandler.CreateToken(tokenDescriptor);
-                       return Ok(tokenhandler.WriteToken(token));
+                    var JwtToken = new Tokens()
+                    {
+                         JwtToken =tokenhandler.WriteToken(token)
+                    };
+                       return Ok(JwtToken);
                 }
             } 
             return BadRequest(error:"Invalid Credentials");

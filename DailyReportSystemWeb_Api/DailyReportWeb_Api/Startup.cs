@@ -58,6 +58,9 @@ namespace DailyReportWeb_Api
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "DailyReportWeb_Api", Version = "v1" });
             });
+            //CorsPolicy
+            services.AddCors(options => options.AddPolicy("CorsPolicy",builder=>builder.WithOrigins
+            ("http://localhost:4200").AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod()));
 
             //JWT Configuration
             var appSettingSection = Configuration.GetSection("AppSettings");
@@ -91,10 +94,12 @@ namespace DailyReportWeb_Api
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "DailyReportWeb_Api v1"));
             }
+            app.UseCors("CorsPolicy");
             app.UseHttpsRedirection();
             app.UseRouting();
             app.UseAuthentication();
             app.UseAuthorization();
+            
             //
            
             app.UseEndpoints(endpoints =>

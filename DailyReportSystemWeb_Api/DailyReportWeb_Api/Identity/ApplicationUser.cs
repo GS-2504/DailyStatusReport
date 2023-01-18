@@ -11,8 +11,6 @@ namespace DailyReportWeb_Api.Identity
     public class ApplicationUser: IdentityUser
     {  
         [NotMapped]
-        public string Token { get; set; }
-        [NotMapped]
         public string Role { get; set; }
         public virtual ICollection<UserTask> Tasks { get; set; }
     }
