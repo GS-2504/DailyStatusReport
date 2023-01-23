@@ -5,22 +5,36 @@ import { AppComponent } from './app.component';
 import { LoginComponent } from './Component/login/login.component';
 import {ReactiveFormsModule} from '@angular/forms';
 import { SignUpComponent } from './Component/sign-up/sign-up.component';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule,HTTP_INTERCEPTORS } from '@angular/common/http';
+import { JwtinterceptorService } from './services/jwtinterceptor.service';
+import { ConfirmemailComponent } from './Component/confirmemail/confirmemail.component';
+import { ActivatedRoute } from '@angular/router';
+import { ResetpasswordComponent } from './Component/resetpassword/resetpassword.component';
+import { ForgotpasswordComponent } from './Component/forgotpassword/forgotpassword.component';
+
+
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
     SignUpComponent,
-   
+    ConfirmemailComponent,
+    ForgotpasswordComponent,
+    ResetpasswordComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     ReactiveFormsModule,
-    HttpClientModule
+    HttpClientModule,
+    
   ],
-  providers: [],
+  providers: [{
+    provide:HTTP_INTERCEPTORS,
+    useClass:JwtinterceptorService,
+    multi:true
+  }],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

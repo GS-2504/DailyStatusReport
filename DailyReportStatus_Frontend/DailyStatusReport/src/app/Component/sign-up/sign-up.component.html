@@ -1,5 +1,5 @@
 <div class="container col-4">
-    <form [formGroup]="signUpform">
+    <form [formGroup]="signUpform" (onSubmit)="signUpform">
         <!-- Name input -->
         <div class="form-outline mb-4">
             <label class="form-label" for="name">Name</label>
@@ -24,10 +24,18 @@
             <span *ngIf="signUpform.get('password')?.invalid && signUpform.get('password')?.touched" class="text-danger">Password is required and must be at least 8 characters long.</span>
           </div>
         </div>
+        <div class="form-outline mb-4">
+          <label class="form-label" for="confirmPassword">Confirm Password</label>
+          <input type="password" formControlName="confirmPassword" id="confirmPassword" placeholder="Confirm Your Password" class="form-control" />
+          <div>
+            <span *ngIf="signUpform.get('confirmPassword')?.errors && signUpform.get('confirmPassword')?.touched" class="text-danger">Passwords do not match.</span>
+          </div>
+        </div>
+        
         <!-- 2 column grid layout for inline styling -->
         
       
         <!-- Submit button -->
-        <button type="button" class="btn btn-primary btn-block mb-4">Sign Up</button>
+        <button type="submit" (click)="signUpProceed()" class="btn btn-primary btn-block mb-4">Sign Up</button>
       </form>
     </div>

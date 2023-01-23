@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.WebUtilities;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using MimeKit;
@@ -18,6 +19,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 
 namespace DailyReportWeb_Api.Controllers
 {
@@ -41,96 +43,91 @@ namespace DailyReportWeb_Api.Controllers
             _env = env;
             _appSettings = appSettings.Value;
         }
-        [NonAction]
-        public async Task<IActionResult> ConfirmEmail(string userId, string code)
+        [HttpPost("ConfirmEmail")]
+        public async Task<IActionResult> ConfirmEmail([FromBody]ConfirmEmail confirmEmail)
         {
-            var user = await _userManager.FindByIdAsync(userId);
+            var user = await _userManager.FindByIdAsync(confirmEmail.UserId);
             if (user == null)
             {
-                return NotFound($"Unable to load user with ID '{userId}'.");
+                return NotFound($"Unable to load user with ID '{confirmEmail.UserId}'.");
             }
-            var result = await _userManager.ConfirmEmailAsync(user, code);
+            confirmEmail.Code = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(confirmEmail.Code));
+            var result = await _userManager.ConfirmEmailAsync(user, confirmEmail.Code);
             if (!result.Succeeded)
             {
-                return BadRequest($"Error confirming email for user with ID '{userId}':");
+                return BadRequest($"Error confirming email for user with ID '{confirmEmail.UserId}':");
             }
-            return Ok();
+            return Ok("Email confirmed");
         }
 
        [HttpPost("RegisterUser")]
        public async Task<IActionResult> RegisterUser([FromBody]UserSignUp model)
         {
-            if (!ModelState.IsValid) return BadRequest();
+            if (!ModelState.IsValid && model==null) return BadRequest();
             var applicationUser = new ApplicationUser()
             {   
                 UserName= model.Name,
                 Email = model.Email,
             };
             var result =await _userManager.CreateAsync(applicationUser, model.Password);
-            if (result.Succeeded)
-            {   
-                if (!await _roleManager.RoleExistsAsync(SD.Role_Admin))
-                {
-                    var role = new ApplicationRole();
-                    role.Name = SD.Role_Admin;
-                    await  _roleManager.CreateAsync(role);
-                    await _userManager.AddToRoleAsync(applicationUser,SD.Role_Admin);
-                }
-                //if (!await _roleManager.RoleExistsAsync(SD.Role_Organization))
-                //{
-                //    var role = new ApplicationRole();
-                //    role.Name = SD.Role_Organization;
-                //    await _roleManager.CreateAsync(role);
-                //    await _userManager.AddToRoleAsync(applicationUser, SD.Role_Organization);
-                //}
-                //if (!await _roleManager.RoleExistsAsync(SD.Role_TeamLeader))
-                //{
-                //    var role = new ApplicationRole();
-                //    role.Name = SD.Role_TeamLeader;
-                //    await _roleManager.CreateAsync(role);
-                //    await _userManager.AddToRoleAsync(applicationUser, SD.Role_TeamLeader);
-                //}
-                //if (!await _roleManager.RoleExistsAsync(SD.Role_User))
-                //{
-                //    var role = new ApplicationRole();
-                //    role.Name = SD.Role_User;
-                //    await _roleManager.CreateAsync(role);
-                //}
-                if (model.Role == null)
-                {
-                    await _userManager.AddToRoleAsync(applicationUser, SD.Role_User);
-                }
-                else
-                {
-
-                }
-                var code = await _userManager.GenerateEmailConfirmationTokenAsync(applicationUser);
-                code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
-                var callbackUrl = Url.Action(nameof(ConfirmEmail), "Account", new { userId = applicationUser.Id, code = code }, protocol: HttpContext.Request.Scheme);
-                var pathToFile = _env.ContentRootPath + Path.DirectorySeparatorChar.ToString() + "Templates"
-                           + Path.DirectorySeparatorChar.ToString()
-                           + "EmailTemplate"
-                           + Path.DirectorySeparatorChar.ToString()
-                           + "Welcome_Email.html";
-                string Message = "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>";
-                var subject = "Confirm Account Registration";
-                var builder = new BodyBuilder();
-                using (StreamReader SourceReader = System.IO.File.OpenText(pathToFile))
-                {
-                    builder.HtmlBody = SourceReader.ReadToEnd();
-                }
-                string messageBody = string.Format(builder.HtmlBody,
-                        String.Format("{0:dddd, d MMMM yyyy}", DateTime.Now),
-                        subject,
-                        model.Email,
-                        model.Name,
-                        model.Password,
-                        Message,
-                        callbackUrl
-                        );
-                await _emailSender.SendEmailAsync(model.Email, subject, messageBody);
+            if (!result.Succeeded)
+            {
+                return BadRequest("Something Went Wrong While creating Account");
             }
-                       return Ok();
+            if (!await _roleManager.RoleExistsAsync(SD.Role_Admin))
+            {
+                var role = new ApplicationRole();
+                role.Name = SD.Role_Admin;
+                await _roleManager.CreateAsync(role);
+                await _userManager.AddToRoleAsync(applicationUser, SD.Role_Admin);
+            }
+            //if (!await _roleManager.RoleExistsAsync(SD.Role_Organization))
+            //{
+            //    var role = new ApplicationRole();
+            //    role.Name = SD.Role_Organization;
+            //    await _roleManager.CreateAsync(role);
+            //    await _userManager.AddToRoleAsync(applicationUser, SD.Role_Organization);
+            //}
+            //if (!await _roleManager.RoleExistsAsync(SD.Role_TeamLeader))
+            //{
+            //    var role = new ApplicationRole();
+            //    role.Name = SD.Role_TeamLeader;
+            //    await _roleManager.CreateAsync(role);
+            //    await _userManager.AddToRoleAsync(applicationUser, SD.Role_TeamLeader);
+            //}
+            //if (!await _roleManager.RoleExistsAsync(SD.Role_User))
+            //{
+            //    var role = new ApplicationRole();
+            //    role.Name = SD.Role_User;
+            //    await _roleManager.CreateAsync(role);
+            //}
+            var code = await _userManager.GenerateEmailConfirmationTokenAsync(applicationUser);
+            code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
+            var callbackUrl = Url.Content("http://localhost:4200/confirmemail/?" + "UserId=" + applicationUser.Id + "&code=" + code);
+            var pathToFile = _env.ContentRootPath + Path.DirectorySeparatorChar.ToString() + "Templates"
+                       + Path.DirectorySeparatorChar.ToString()
+                       + "EmailTemplate"
+                       + Path.DirectorySeparatorChar.ToString()
+                       + "Welcome_Email.html";
+            string Message = "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>";
+            var subject = "Confirm Account Registration";
+            var builder = new BodyBuilder();
+            using (StreamReader SourceReader = System.IO.File.OpenText(pathToFile))
+            {
+                builder.HtmlBody = SourceReader.ReadToEnd();
+            }
+            string messageBody = string.Format(builder.HtmlBody,
+                    String.Format("{0:dddd, d MMMM yyyy}", DateTime.Now),
+                    subject,
+                    model.Email,
+                    model.Name,
+                    model.Password,
+                    Message,
+                    callbackUrl
+                    );
+            await _emailSender.SendEmailAsync(model.Email, subject, messageBody);
+                      return Ok();
+           
         }
         [HttpPost("UserSignIn")]
        public async Task<IActionResult> UserSignIn([FromBody]UserSignIn userSignIn)
@@ -171,6 +168,72 @@ namespace DailyReportWeb_Api.Controllers
                 }
             } 
             return BadRequest(error:"Invalid Credentials");
+       }
+        [HttpPost("ResendEmail")]
+        public async Task<IActionResult> ResendEmail([FromBody] ResendEmail resendEmail)
+        {
+            if (string.IsNullOrEmpty(resendEmail.Email)) return BadRequest();
+            var applicationUser = _userManager.FindByEmailAsync(resendEmail.Email);
+            if (applicationUser == null) return BadRequest($"User Not Registred With this Email: {resendEmail.Email}");
+            var code = await _userManager.GenerateEmailConfirmationTokenAsync(applicationUser.Result);
+            code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
+            var callbackUrl = Url.Content("http://localhost:4200/confirmemail/?" + "UserId=" + applicationUser.Id + "&code=" + code);
+            var pathToFile = _env.ContentRootPath + Path.DirectorySeparatorChar.ToString() + "Templates"
+                       + Path.DirectorySeparatorChar.ToString()
+                       + "EmailTemplate"
+                       + Path.DirectorySeparatorChar.ToString()
+                       + "Welcome_Email.html";
+            string Message = "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>";
+            var subject = "Confirm Account Registration";
+            var builder = new BodyBuilder();
+            using (StreamReader SourceReader = System.IO.File.OpenText(pathToFile))
+            {
+                builder.HtmlBody = SourceReader.ReadToEnd();
+            }
+            string messageBody = string.Format(builder.HtmlBody,
+                    String.Format("{0:dddd, d MMMM yyyy}", DateTime.Now),
+                    subject,
+                    applicationUser.Result.Email,
+                    applicationUser.Result.UserName,
+                    applicationUser.Result.Email,
+                    Message,
+                    callbackUrl
+                    );
+            await _emailSender.SendEmailAsync(applicationUser.Result.Email, subject, messageBody);
+            return Ok();
+        }
+        [HttpPost("ForgotPassword")]
+        public async Task<IActionResult> ForgotPassword(ResendEmail resendEmail)
+        {
+            if (string.IsNullOrEmpty(resendEmail.Email)) return BadRequest();
+            var applicationUser = _userManager.FindByEmailAsync(resendEmail.Email);
+            var code = await _userManager.g
+            code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
+            var callbackUrl = Url.Content("http://localhost:4200/resetpassword?" + "code="+code);
+            var pathToFile = _env.ContentRootPath + Path.DirectorySeparatorChar.ToString() + "Templates"
+                       + Path.DirectorySeparatorChar.ToString()
+                       + "EmailTemplate"
+                       + Path.DirectorySeparatorChar.ToString()
+                       + "Welcome_Email.html";
+            string Message = "Reset Your Password By Clicking Here<a href=\"" + callbackUrl + "\">here</a>";
+            var subject = "Reset Your Password";
+            var builder = new BodyBuilder();
+            using (StreamReader SourceReader = System.IO.File.OpenText(pathToFile))
+            {
+                builder.HtmlBody = SourceReader.ReadToEnd();
+            }
+            string messageBody = string.Format(builder.HtmlBody,
+                    String.Format("{0:dddd, d MMMM yyyy}", DateTime.Now),
+                    subject,
+                    applicationUser.Result.Email,
+                    applicationUser.Result.UserName,
+                    applicationUser.Result.Email,
+                    Message,
+                    callbackUrl
+                    );
+            await _emailSender.SendEmailAsync(applicationUser.Result.Email, subject, messageBody);
+                      return Ok();
         }
     }
+
 }

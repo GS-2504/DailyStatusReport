@@ -45,7 +45,7 @@ namespace DailyReportWeb_Api.Utility
                   string str = ex.Message;
                 }
             }
-
+        
         }
     }
 
