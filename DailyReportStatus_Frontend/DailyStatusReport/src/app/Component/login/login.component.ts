@@ -33,8 +33,11 @@ export class LoginComponent implements OnInit {
            alert('You are logged in');
         },
         (error)=>{
-          console.log(error);
-        }
+          if(error.error=="Please Confirm your Email"){
+          this.route.navigateByUrl('/emailconfirm?'+"Email="+this.loginForm.value.email);
+          }else{
+          alert('Something Went Wrong');
+        }}
       )
      // console.log(this.loginForm.value);
     }

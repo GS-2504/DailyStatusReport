@@ -1,6 +1,6 @@
 import { style } from '@angular/animations';
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { Useremailconfirm } from 'src/app/model/useremailconfirm';
 import { AuthService } from 'src/app/services/auth.service';
 
@@ -14,27 +14,25 @@ export class ConfirmemailComponent implements OnInit {
   constructor(private service:AuthService,private route:ActivatedRoute) { }
 
   ngOnInit(): void {
-  
-  
-    debugger
-   this.route.queryParams.subscribe((params) => {
-        this.confirm.UserId =params['UserId']; 
-        this.confirm.Code= params['code'];
-       this.service.emailConfirmed(this.confirm).subscribe(
-        (response)=>{
-           alert('hloo');
-        },
-        (error)=>{
-          alert('error');
-        }
-       )
-        //console.log(style); // OUTPUT 123
-       // OUTPUT modular
-       
-      });
+    this.confirmEmail();
     }
-    }
-      //  this.auth.emailConfirmed().subscribe(
+   
+    confirmEmail(){
+    this.route.queryParams.subscribe((params) => {
+      this.confirm.UserId =params['UserId']; 
+      this.confirm.Code= params['code'];
+     this.service.emailConfirmed(this.confirm).subscribe(
+      (response)=>{
+        
+      },
+      (error)=>{
+        alert('hlo')
+        console.log(error);
+      }
+     )
+    });
+  }
+    }    //  this.auth.emailConfirmed().subscribe(
       //   ()=>{},
       //  ()=>{}
       // )

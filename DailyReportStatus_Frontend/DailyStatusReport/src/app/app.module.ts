@@ -11,6 +11,8 @@ import { ConfirmemailComponent } from './Component/confirmemail/confirmemail.com
 import { ActivatedRoute } from '@angular/router';
 import { ResetpasswordComponent } from './Component/resetpassword/resetpassword.component';
 import { ForgotpasswordComponent } from './Component/forgotpassword/forgotpassword.component';
+import { HomeComponent } from './Component/home/home.component';
+import { EmailconfirmationComponent } from './Component/emailconfirmation/emailconfirmation.component';
 
 
 
@@ -21,7 +23,9 @@ import { ForgotpasswordComponent } from './Component/forgotpassword/forgotpasswo
     SignUpComponent,
     ConfirmemailComponent,
     ForgotpasswordComponent,
-    ResetpasswordComponent
+    ResetpasswordComponent,
+    HomeComponent,
+    EmailconfirmationComponent
   ],
   imports: [
     BrowserModule,

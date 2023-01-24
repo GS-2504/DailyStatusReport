@@ -27,12 +27,11 @@ export class SignUpComponent implements OnInit {
       console.log()
      this.service.userSignUp(this.signUpform.value).subscribe(
       (response)=>{
-        alert("you are signup successfully");
-        this.route.navigateByUrl('/login');
+      // alert("you are signup successfully");
+        this.route.navigateByUrl('/emailconfirm');
       },
       (error)=>{
-        console.log(error);
-         alert('Something Went Wrong While Creating your Account');
+        alert('Something Went Wrong');
       }
      )
   }

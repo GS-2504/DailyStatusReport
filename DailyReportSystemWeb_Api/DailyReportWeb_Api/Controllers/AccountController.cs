@@ -57,7 +57,7 @@ namespace DailyReportWeb_Api.Controllers
             {
                 return BadRequest($"Error confirming email for user with ID '{confirmEmail.UserId}':");
             }
-            return Ok("Email confirmed");
+            return Ok();
         }
 
        [HttpPost("RegisterUser")]
@@ -136,7 +136,7 @@ namespace DailyReportWeb_Api.Controllers
             var user =await _userManager.FindByEmailAsync(userSignIn.Email);
             if (user != null)
             {
-               // if (user.EmailConfirmed == false) return BadRequest(error: "Please Confirm your Email");
+                if (user.EmailConfirmed == false) return BadRequest(error: "Please Confirm your Email");
                 var result = await _signInManager.PasswordSignInAsync(user.UserName, userSignIn.Password, false, false);
                 if (result.Succeeded)
                 {
@@ -177,7 +177,7 @@ namespace DailyReportWeb_Api.Controllers
             if (applicationUser == null) return BadRequest($"User Not Registred With this Email: {resendEmail.Email}");
             var code = await _userManager.GenerateEmailConfirmationTokenAsync(applicationUser.Result);
             code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
-            var callbackUrl = Url.Content("http://localhost:4200/confirmemail/?" + "UserId=" + applicationUser.Id + "&code=" + code);
+            var callbackUrl = Url.Content("http://localhost:4200/confirmemail/?" + "UserId=" + applicationUser.Result.Id + "&code=" + code);
             var pathToFile = _env.ContentRootPath + Path.DirectorySeparatorChar.ToString() + "Templates"
                        + Path.DirectorySeparatorChar.ToString()
                        + "EmailTemplate"
@@ -202,14 +202,15 @@ namespace DailyReportWeb_Api.Controllers
             await _emailSender.SendEmailAsync(applicationUser.Result.Email, subject, messageBody);
             return Ok();
         }
+
         [HttpPost("ForgotPassword")]
-        public async Task<IActionResult> ForgotPassword(ResendEmail resendEmail)
+        public async Task<IActionResult> ForgotPassword(ForgotPassword forgotPassword)
         {
-            if (string.IsNullOrEmpty(resendEmail.Email)) return BadRequest();
-            var applicationUser = _userManager.FindByEmailAsync(resendEmail.Email);
-            var code = await _userManager.g
+            if (string.IsNullOrEmpty(forgotPassword.Email)) return BadRequest();
+            var applicationUser = _userManager.FindByEmailAsync(forgotPassword.Email);
+            var code =await _userManager.GeneratePasswordResetTokenAsync(applicationUser.Result);
             code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
-            var callbackUrl = Url.Content("http://localhost:4200/resetpassword?" + "code="+code);
+            var callbackUrl = Url.Content("http://localhost:4200/resetpassword?" + "UserId=" + applicationUser.Result.Id + "&code=" + code);
             var pathToFile = _env.ContentRootPath + Path.DirectorySeparatorChar.ToString() + "Templates"
                        + Path.DirectorySeparatorChar.ToString()
                        + "EmailTemplate"
@@ -234,6 +235,18 @@ namespace DailyReportWeb_Api.Controllers
             await _emailSender.SendEmailAsync(applicationUser.Result.Email, subject, messageBody);
                       return Ok();
         }
+        [HttpPost("ResetPassword")]
+        public async Task<IActionResult> ResetPassWord(ResetPassword resetPassword)
+        {
+            if (resetPassword==null && !ModelState.IsValid) return BadRequest();
+            var user = _userManager.FindByIdAsync(resetPassword.UserId);
+            if (user.Result == null) return BadRequest();
+            var decodedToken = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(resetPassword.Token));
+            var result =await _userManager.ResetPasswordAsync(user.Result,decodedToken,resetPassword.Password);
+            if (result.Succeeded) return Ok();
+            return BadRequest("Something Went Wrong While Reseting your Password");
+        }
+        }
     }
 
-}
+
