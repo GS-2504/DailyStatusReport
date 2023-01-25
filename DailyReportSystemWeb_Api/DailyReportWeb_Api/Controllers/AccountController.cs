@@ -130,10 +130,10 @@ namespace DailyReportWeb_Api.Controllers
            
         }
         [HttpPost("UserSignIn")]
-       public async Task<IActionResult> UserSignIn([FromBody]UserSignIn userSignIn)
+        public async Task<IActionResult> UserSignIn([FromBody] UserSignIn userSignIn)
         {
-            if(!ModelState.IsValid) return BadRequest();
-            var user =await _userManager.FindByEmailAsync(userSignIn.Email);
+            if (!ModelState.IsValid) return BadRequest();
+            var user = await _userManager.FindByEmailAsync(userSignIn.Email);
             if (user != null)
             {
                 if (user.EmailConfirmed == false) return BadRequest(error: "Please Confirm your Email");
@@ -153,22 +153,22 @@ namespace DailyReportWeb_Api.Controllers
                         {
                           new Claim(ClaimTypes.Name, user.UserName),
                           new Claim(ClaimTypes.Email, user.Email),
-                          new Claim(ClaimTypes.Role,user.Role)
+                         // new Claim(ClaimTypes.Role,user.Role)
                         }),
-                        Expires = DateTime.UtcNow.AddHours(1),
+                        Expires = DateTime.UtcNow.AddSeconds(15),
                         SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key),
                         SecurityAlgorithms.HmacSha256Signature)
                     };
                     var token = tokenhandler.CreateToken(tokenDescriptor);
                     var JwtToken = new Tokens()
                     {
-                         JwtToken =tokenhandler.WriteToken(token)
+                        JwtToken = tokenhandler.WriteToken(token)
                     };
-                       return Ok(JwtToken);
+                    return Ok(JwtToken);
                 }
-            } 
-            return BadRequest(error:"Invalid Credentials");
-       }
+            }
+            return BadRequest(error: "Invalid Credentials");
+        }
         [HttpPost("ResendEmail")]
         public async Task<IActionResult> ResendEmail([FromBody] ResendEmail resendEmail)
         {
@@ -204,10 +204,11 @@ namespace DailyReportWeb_Api.Controllers
         }
 
         [HttpPost("ForgotPassword")]
-        public async Task<IActionResult> ForgotPassword(ForgotPassword forgotPassword)
+        public async Task<IActionResult> ForgotPassword([FromBody]ForgotPassword forgotPassword)
         {
             if (string.IsNullOrEmpty(forgotPassword.Email)) return BadRequest();
             var applicationUser = _userManager.FindByEmailAsync(forgotPassword.Email);
+            if (applicationUser.Result == null) return NotFound();
             var code =await _userManager.GeneratePasswordResetTokenAsync(applicationUser.Result);
             code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
             var callbackUrl = Url.Content("http://localhost:4200/resetpassword?" + "UserId=" + applicationUser.Result.Id + "&code=" + code);

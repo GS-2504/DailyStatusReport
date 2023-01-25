@@ -7,11 +7,12 @@ import { HomeComponent } from './Component/home/home.component';
 import { LoginComponent } from './Component/login/login.component';
 import { ResetpasswordComponent } from './Component/resetpassword/resetpassword.component';
 import { SignUpComponent } from './Component/sign-up/sign-up.component';
+import { UserComponent } from './Component/user/user.component';
 import { AuthGuard } from './shared/auth.guard';
 
 const routes: Routes = [
   {path:"",redirectTo:"home",pathMatch:"full"},
-  {path:"home",component:HomeComponent},
+  {path:"user",component:UserComponent},
   {path:"login",component:LoginComponent},
   {path:"signup",component:SignUpComponent},
   {path:"confirmemail",component:ConfirmemailComponent},

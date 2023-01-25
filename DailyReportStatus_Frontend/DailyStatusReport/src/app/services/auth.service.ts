@@ -28,6 +28,9 @@ export class AuthService {
   resendConfirmationEmailToUser(email:any):Observable<any>{
    return this.http.post<any>("https://localhost:44387/api/Account/ResendEmail",email);
   }
+  forgotPasswordEmailToUser(email:any):Observable<any>{
+    return this.http.post<any>("https://localhost:44387/api/Account/ForgotPassword",email);
+   }
   isLoggedIn(){
      return localStorage.getItem('Jwttoken')!=null;
   }

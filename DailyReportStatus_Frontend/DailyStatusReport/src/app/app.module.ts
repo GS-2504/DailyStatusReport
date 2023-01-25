@@ -13,8 +13,7 @@ import { ResetpasswordComponent } from './Component/resetpassword/resetpassword.
 import { ForgotpasswordComponent } from './Component/forgotpassword/forgotpassword.component';
 import { HomeComponent } from './Component/home/home.component';
 import { EmailconfirmationComponent } from './Component/emailconfirmation/emailconfirmation.component';
-
-
+import { UserComponent } from './Component/user/user.component';
 
 @NgModule({
   declarations: [
@@ -25,14 +24,15 @@ import { EmailconfirmationComponent } from './Component/emailconfirmation/emailc
     ForgotpasswordComponent,
     ResetpasswordComponent,
     HomeComponent,
-    EmailconfirmationComponent
+    EmailconfirmationComponent,
+    UserComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     ReactiveFormsModule,
     HttpClientModule,
-    
+   
   ],
   providers: [{
     provide:HTTP_INTERCEPTORS,
