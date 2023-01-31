@@ -1,3 +1,4 @@
+using DailyReportWeb_Api.DTOMapping;
 using DailyReportWeb_Api.Identity;
 using DailyReportWeb_Api.Utility;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -54,6 +55,7 @@ namespace DailyReportWeb_Api
             services.AddScoped<ApplicationRoleStore>();
             services.AddScoped<ApplicationUserStore>();
             services.AddControllers();
+            services.AddAutoMapper(typeof(MappingProfile));
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "DailyReportWeb_Api", Version = "v1" });

@@ -1,93 +1,112 @@
 <div class="container col-8">
-    <h2 class="text-primary text-center">Your Task</h2>
+  <h2 class="text-primary text-center">Your Task</h2>
 <button  class="btn btn-info  p-2 m-2 "data-toggle="modal" data-target="#newModal"  >Add NewTask</button>
 <!-- <<table class="table table-hover table-stripped table-bordered table-active">
-    <thead>
-        <tr>
-            <th>Task Name</th>
-            <th>TaskDate</th>
-            <th>TodayHours</th>
-            <th>Success</th>
-            <th>Obstacle</th>
-            <th>NextDayPlan</th>
-            <th>Actions</th>
-            <th>Status</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-    <!-- <tr *ngFor="let student of studentlist;let i=index">
-       <td>{{student.name}}</td>
-       <td>{{student.age}}</td>
-       <td>{{student.email}}</td>
-       <td>
-        <button  data-toggle="modal" data-target="#editModal" class="btn btn-info p-1 m-1">Edit</button>
-        <button  class="btn btn-danger p-1 m-1">Delete</button>
-       </td> -->
-    <!-- </tr>
-    </tbody>
+  <thead>
+      <tr>
+          <th>Task Name</th>
+          <th>TaskDate</th>
+          <th>TodayHours</th>
+          <th>Success</th>
+          <th>Obstacle</th>
+          <th>NextDayPlan</th>
+          <th>Actions</th>
+          <th>Status</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+  <!-- <tr *ngFor="let student of studentlist;let i=index">
+     <td>{{student.name}}</td>
+     <td>{{student.age}}</td>
+     <td>{{student.email}}</td>
+     <td>
+      <button  data-toggle="modal" data-target="#editModal" class="btn btn-info p-1 m-1">Edit</button>
+      <button  class="btn btn-danger p-1 m-1">Delete</button>
+     </td> -->
+  <!-- </tr>
+  </tbody>
 </table> -->
 </div>
 
-            <!-- Add Task -->
-             <!-- create -->
-<form>
-    <div class="modal" role="dialog" id="newModal">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <!-- header -->
-                <div class="modal-header">
-                    <div class="modal-title">Add New Task</div>
-                    <button class="close" data-dismiss="modal" type="button"><span>&times;</span></button>
+          <!-- Add Task -->
+           <!-- create -->
+
+  <div class="modal" role="dialog" id="newModal">
+    <form  [formGroup]="form" (onSubmit)="form">
+      <div   class="modal-dialog modal-lg">
+        
+          <div class="modal-content" formArrayName="tasks">
+              <!-- header -->
+              <div class="modal-header">
+                  <div class="modal-title">Add New Task</div>
+                  <button class="close" data-dismiss="modal" type="button"><span>&times;</span></button>
+              </div>
+              <div class="modal-body" *ngFor="let task of tasks.controls; let i=index">
+                <div>
+                  <div class="form-group row">
+                      <label for="txttaskname" class="col-sm-2">Task Name</label> 
+                      <div class="col-sm-8">
+                      <input type="text" [formControlName]="i"  name="txttaskname" placeholder="Enter Task Name" class="form-control" id="txttaskname"/>
+                      <div>
+                        <span *ngIf="form.get('taskname')?.invalid && form.get('taskname')?.touched" class="text-danger">Name is Required</span>
+                    </div>
+                      </div>
+                     
+                      <div>
+                       
+                      </div>
+                  </div>
+                      <div class="form-group row">
+                          <label for="txtdate" class="col-sm-2">TaskDate</label> 
+                          <div class="col-sm-8">
+                          <input type="date"  name="txtdate"  placeholder="Task Date" class="form-control" id="txtdate"/>
+                          </div>
+                  </div>
+                  <div class="form-group row">
+                      <label for="txttaskhour" class="col-sm-2">TaskHours</label> 
+                      <div class="col-sm-8">
+                      <input type="text"    name="txttaskhour"  placeholder="Task Hours" class="form-control" id="txttaskhour"/>
+                      </div>
+                  </div>
+                  <div class="form-group row">
+                      <label for="txtsuccess" class="col-sm-2">Success</label> 
+                      <div class="col-sm-8">
+                      <textarea type="text"    name="txtsuccess"  placeholder="Task Success" class="form-control" id="txtsuccess"></textarea>
+                      </div>
+                  </div>
+                  <div class="form-group row">
+                      <label for="txtobstacle" class="col-sm-2">Obstacle</label> 
+                      <div class="col-sm-8">
+                      <input type="text"    name="txtobstacle"  placeholder="Task Obstacle" class="form-control" id="txtobstacle"/>
+                      </div>
+                  </div>
+                  <div class="form-group row">
+                      <label for="txtnextdayplan" class="col-sm-2">NextDayPlan</label> 
+                      <div class="col-sm-8">
+                      <input type="text"    name="txtnextdayplan"  placeholder="Next Day Plan" class="form-control" id="txtnextdayplan"/>
+                      </div>
+                  </div>
+                  <div>
+                    <button class="btn btn-success" (click)="addMoreTask()" >Add more Tasks</button>
+                    </div><div>
+                    <button *ngIf="i>0" (click)="removeTask(i)" class="btn btn-danger">
+                      Remove 
+                    </button>
+                  </div>
+              </div>
+              <!-- <div formArrayName="nestedForms" *ngFor="let nestedForm of nestedForms.controls; let i = index">
+                  <div [formGroupName]="i">
+                      </div> -->
+                 <!-- footer -->
+                 <div class="modal-footer modal-lg">
+                  <button  class="btn btn-info" type="submit"  (click)="onSave()" data-dismiss="modal">Save</button>
+                  <button class="btn btn-danger" data-dismiss="modal">Cancel</button>
+                 </div>
+              </div>
                 </div>
-                <div class="modal-body">
-                    <div class="form-group row">
-                        <label for="txttaskname" class="col-sm-2">Task Name</label> 
-                        <div class="col-sm-8">
-                        <input type="text"   name="txttaskname" placeholder="Enter Task Name" class="form-control" id="txttaskname"/>
-                        
-                        </div>
-                    </div>
-                        <div class="form-group row">
-                            <label for="txtdate" class="col-sm-2">TaskDate</label> 
-                            <div class="col-sm-8">
-                            <input type="number"  name="txtdate"  placeholder="Task Date" class="form-control" id="txtdate"/>
-                            </div>
-                    </div>
-                    <div class="form-group row">
-                        <label for="txttaskhour" class="col-sm-2">TaskHours</label> 
-                        <div class="col-sm-8">
-                        <input type="text"    name="txttaskhour"  placeholder="Task Hours" class="form-control" id="txttaskhour"/>
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <label for="txtsuccess" class="col-sm-2">Success</label> 
-                        <div class="col-sm-8">
-                        <input type="text"    name="txtsuccess"  placeholder="Task Success" class="form-control" id="txtsuccess"/>
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <label for="txtobstacle" class="col-sm-2">Obstacle</label> 
-                        <div class="col-sm-8">
-                        <input type="text"    name="txtobstacle"  placeholder="Task Obstacle" class="form-control" id="txtobstacle"/>
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <label for="txtnextdayplan" class="col-sm-2">NextDayPlan</label> 
-                        <div class="col-sm-8">
-                        <input type="text"    name="txtnextdayplan"  placeholder="Next Day Plan" class="form-control" id="txtnextdayplan"/>
-                        </div>
-                    </div>
-                </div>
-                <div formArrayName="nestedForms" *ngFor="let nestedForm of nestedForms.controls; let i = index">
-                    <div [formGroupName]="i">
-                        </div>
-                   <!-- footer -->
-                   <div class="modal-footer modal-lg">
-                    <button  class="btn btn-info" data-dismiss="modal">Save</button>
-                    <button class="btn btn-danger" data-dismiss="modal">Cancel</button>
-                   </div>
-            </div>
-        </div>
-    </div>
-</form>
+      </div>
+    </form>
+  </div>
+
+
