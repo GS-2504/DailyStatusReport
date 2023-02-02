@@ -30,7 +30,7 @@ export class LoginComponent implements OnInit {
       this.service.userLogin(this.loginForm.value).subscribe(
         (Response)=>{
            localStorage.setItem('Jwttoken',Response.jwtToken);
-           this.route.navigateByUrl('/home');
+           this.route.navigateByUrl('/user');
         },
         (error)=>{
           if(error.error=="Please Confirm your Email"){

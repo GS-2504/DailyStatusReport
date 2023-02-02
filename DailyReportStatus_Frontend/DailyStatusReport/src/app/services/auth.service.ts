@@ -31,17 +31,30 @@ export class AuthService {
   forgotPasswordEmailToUser(email:any):Observable<any>{
     return this.http.post<any>("https://localhost:44387/api/Account/ForgotPassword",email);
    }
+   addUserTask(userTasks:any):Observable<any>{
+    return this.http.post<any>("https://localhost:44387/api/User/UserTask",userTasks);
+   }
+   getAllUserTaskDetails(userId:string):Observable<any>{
+    return this.http.get<any>("https://localhost:44387/api/User/"+userId);
+   }
   isLoggedIn(){
      return localStorage.getItem('Jwttoken')!=null;
   }
   getToken(){
-      return localStorage.getItem('JwtToken') || '';
+      return localStorage.getItem('Jwttoken') || '';
   }
   haveAccess(){
      var JwtToken = this.getToken();
      var extractedToken = JwtToken.split('.')[1];
      var atobdata = atob(extractedToken);
-     var finaldata = JSON.parse(atobdata);
+    return JSON.parse(atobdata);
+  }
+  userId():string{
+      const jwt = this.getToken();
+      const extractedtoken=jwt.split('.')[1];
+      const jwtData = JSON.parse(window.atob(extractedtoken));
+      return jwtData.nameid;
+      
   }
 }
 

@@ -12,7 +12,8 @@ import { AuthGuard } from './shared/auth.guard';
 
 const routes: Routes = [
   {path:"",redirectTo:"home",pathMatch:"full"},
-  {path:"user",component:UserComponent},
+  {path:"home",component:HomeComponent},
+  {path:"user",component:UserComponent,canActivate:[AuthGuard]},
   {path:"login",component:LoginComponent},
   {path:"signup",component:SignUpComponent},
   {path:"confirmemail",component:ConfirmemailComponent},

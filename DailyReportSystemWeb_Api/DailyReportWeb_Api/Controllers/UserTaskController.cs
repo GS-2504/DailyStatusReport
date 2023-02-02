@@ -20,6 +20,25 @@ namespace DailyReportWeb_Api.Controllers
         {
             _context = context;
         }
+
+        [HttpGet("{userId}")]
+        public IActionResult GetAllUserTask(string userId)
+        {
+            if (string.IsNullOrEmpty(userId)) return BadRequest();
+            var taskDetails = _context.UserTask.Where(userTask => userTask.UserId == userId).Select(userTask =>
+            new UserTaskDetailsDto
+            {  
+                //Id=userTask.Id,
+                TaskName = userTask.TaskName,
+                TaskDate = userTask.TaskDate,
+                TaskHours = userTask.TaskHours,
+                Obstacle = userTask.Obstacle,
+                NextDayPlan = userTask.NextDayPlan,
+                Success = userTask.Success,
+                UserStatus = (int)userTask.UserStatus
+            });
+            return Ok(taskDetails);
+        }
         [HttpPost("UserTask")]
         public async Task<IActionResult> UserTask(UserTaskDto[] userTask)
         {
@@ -32,7 +51,7 @@ namespace DailyReportWeb_Api.Controllers
                     TaskName = task.TaskName,
                     TaskDate = task.TaskDate,
                     TaskHours = task.TaskHours,
-                    NextDayPlan = task.NextDayPlan,
+                     NextDayPlan = task.NextDayPlan,
                     Success = task.Success,
                     Obstacle = task.Obstacle,
                     UserStatus = Model.UserTask.Status.Pending
@@ -42,18 +61,6 @@ namespace DailyReportWeb_Api.Controllers
               await  _context.SaveChangesAsync();
                    return Ok();
         }
-        //[HttpGet]
-        //public async Task<IActionResult> GetAllUserTask()
-        //{
-        //    var result = from user in _context.UserTask join
-        //                 applicationuser in _context.Users on
-        //                 user.UserId equals applicationuser.Id select
-        //                 new
-        //                 {
-        //                     name = applicationuser.NormalizedUserName,
-        //                     UserTask = user.TaskName
-        //                 };
-        //    return Ok(result);
-        //}
+        
     }
 }

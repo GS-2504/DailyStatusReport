@@ -1,10 +1,24 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { AuthService } from './services/auth.service';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent {
-  title = 'DailyStatusReport';
+export class AppComponent implements OnInit{
+    value:string
+  constructor(private service: AuthService) {
+     if(this.service.isLoggedIn()){
+         this.value="logout"
+       }else{
+        this.value="login"
+        }
+  }
+  ngOnInit(): void {}
+   
+  logOut(){
+    localStorage.clear();
+     this.value="login"
+  }
 }
