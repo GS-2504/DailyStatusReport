@@ -1,38 +1,38 @@
-import { Component, OnInit,OnDestroy } from '@angular/core';
+import { Component, OnInit,OnDestroy,ViewChild,ElementRef,AfterViewInit } from '@angular/core';
 import { FormGroup,Validators, FormArray, FormBuilder } from '@angular/forms';
 import { Usertaskdetailsdto } from 'src/app/model/usertaskdetailsdto';
 import { Usertaskdto } from 'src/app/model/usertaskdto';
 import { AuthService } from 'src/app/services/auth.service';
 import { Subject } from 'rxjs';
-import { Status } from 'src/app/model/usertaskdetailsdto';
+ import * as XLSX from 'xlsx';
 @Component({
   selector: 'app-user',
   templateUrl: './user.component.html',
   styleUrls: ['./user.component.scss'],
 
 })
-export class UserComponent implements OnInit,OnDestroy {
+export class UserComponent implements OnInit,OnDestroy,AfterViewInit {
   form: FormGroup
   usertask: Usertaskdto = new Usertaskdto();
   usertasks: Usertaskdto[] = [];
   userTaskDetails:Usertaskdetailsdto[]=[];
-  datatOptions:DataTables.Settings = {};
+  datatOptions:DataTables.Settings={};
   dtTrigger: Subject<any> = new Subject();
-  status:Status
+  exportActive:boolean = false;
+  @ViewChild('table', { static: false }) table: ElementRef;
   constructor(private formbuilder: FormBuilder, private service: AuthService) {
   }
 
   ngOnInit(): void {
     this.datatOptions = {
       pagingType: 'full_numbers',
-      pageLength: 5,
+      pageLength: 10,
       processing: true
     };
     this.service.getAllUserTaskDetails(this.service.userId()).subscribe(
       (response) => {
        this.userTaskDetails = response;
        this.dtTrigger.next(null);
-       this.service.getAllUserTaskDetails(this.service.userId());
       },
       (error) => {
         console.log(error);
@@ -43,8 +43,13 @@ export class UserComponent implements OnInit,OnDestroy {
     })
    
   }
+  ngAfterViewInit():void {
+   console.log(this.table.nativeElement);
+   let element= document.getElementById('table');
+   console.log(element);
+  }
   ngOnDestroy(): void {
-    this.dtTrigger.unsubscribe();
+   
   }
   
   userTaskForm(): FormGroup {
@@ -67,7 +72,24 @@ export class UserComponent implements OnInit,OnDestroy {
     const control = this.form.controls['tasks'] as FormArray
     control.removeAt(i);
   }
-
+  exportToExcel() {
+    debugger
+    this.exportActive = true;
+    let element = document.getElementById('table');
+    const ws: XLSX.WorkSheet=XLSX.utils.table_to_sheet(element);
+    const wb: XLSX.WorkBook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+    
+    /* save to file */
+    XLSX.writeFile(wb, 'SheetJS.xlsx');
+  
+   // this.saveAsExcelFile(excelBuffer, 'TaskDetails');
+  }
+//   saveAsExcelFile(buffer: any, fileName: string): void {
+//     const data: Blob = new Blob([buffer], {type: EXCEL_TYPE});
+//      FileSaver.saveAs(data, fileName + 'export' + new Date().getTime() + EXCEL_EXTENSION);
+// }
+//  }
   onSave() {
     debugger
     
@@ -86,8 +108,9 @@ export class UserComponent implements OnInit,OnDestroy {
     console.log(this.form.controls['tasks'].value);
     this.service.addUserTask(this.form.controls['tasks'].value).subscribe(
       (response)=>{
-        alert('task added successfully');
-        $('#newModal').hide();
+        //alert('task added successfully');
+        this.ngOnInit();
+       // $('#newModal').hide();
       },
       (error)=>{
         console.log(error);
@@ -97,5 +120,4 @@ export class UserComponent implements OnInit,OnDestroy {
   }
   get tasks() {
     return this.form.get('tasks') as FormArray;
-  }
-}
+  }}

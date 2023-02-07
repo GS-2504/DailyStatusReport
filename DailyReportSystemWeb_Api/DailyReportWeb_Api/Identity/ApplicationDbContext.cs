@@ -12,9 +12,11 @@ namespace DailyReportWeb_Api.Identity
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options):base(options)
         {
+
         }
         public DbSet<UserTask> UserTask { get; set; }
         public DbSet<ApplicationRole> ApplicationRoles { get; set; }
+        public DbSet<Organization> Organizations { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);

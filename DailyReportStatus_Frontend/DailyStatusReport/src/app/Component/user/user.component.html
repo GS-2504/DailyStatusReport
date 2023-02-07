@@ -1,7 +1,8 @@
 <div class="container col-12">
   <h2 class="text-primary text-center">Your Task</h2>
 <button  class="btn btn-info  p-2 m-2 "data-toggle="modal" data-target="#newModal">Add NewTask</button>
-<table datatable [dtOptions]="datatOptions" [dtTrigger]="dtTrigger" class="table table-hover table-stripped table-bordered table-active">
+<button class="btn btn-danger p-2 m-2" (click)="exportToExcel()">Export To Excel</button>
+<table  id="table" datatable [dtOptions]="datatOptions" [dtTrigger]="dtTrigger" class="table table-hover table-stripped table-bordered table-active">
   <thead>
       <tr>
           <th>Task Name</th>
@@ -17,7 +18,7 @@
   <tbody>
      <tr *ngFor="let usertask of userTaskDetails">
      <td>{{usertask.taskName }}</td>
-     <td>{{usertask.taskDate |date}}</td>
+     <td>{{usertask.taskDate |date }}</td>
      <td>{{usertask.taskHours }}</td>
      <td>{{usertask.success}}</td>
      <td>{{usertask.obstacle}}</td>
@@ -107,5 +108,4 @@
       </div>
     </form>
   </div>
-
-
+  

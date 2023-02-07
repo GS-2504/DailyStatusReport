@@ -35,7 +35,7 @@ namespace DailyReportWeb_Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddEntityFrameworkSqlServer().AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("constr"),
+            services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("constr"),
                 b => b.MigrationsAssembly("DailyReportWeb_Api")));
             //services.AddControllers();
             services.Configure<EmailSettings>(Configuration.GetSection("EmailSettings"));

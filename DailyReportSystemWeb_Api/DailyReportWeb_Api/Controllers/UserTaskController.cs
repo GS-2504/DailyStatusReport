@@ -20,7 +20,6 @@ namespace DailyReportWeb_Api.Controllers
         {
             _context = context;
         }
-
         [HttpGet("{userId}")]
         public IActionResult GetAllUserTask(string userId)
         {

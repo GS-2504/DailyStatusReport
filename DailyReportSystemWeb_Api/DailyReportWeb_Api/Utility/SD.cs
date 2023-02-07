@@ -4,7 +4,8 @@ using System.Linq;
 using System.Threading.Tasks;
 
 namespace DailyReportWeb_Api.Utility
-{
+{   
+    //Roles
     public class SD
     {
         public const string Role_Admin = "SuperAdmin";

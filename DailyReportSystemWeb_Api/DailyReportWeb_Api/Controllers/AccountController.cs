@@ -23,7 +23,7 @@ using System.Web;
 
 namespace DailyReportWeb_Api.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/Account")]
     [ApiController]
     public class AccountController : ControllerBase
     {
@@ -43,6 +43,7 @@ namespace DailyReportWeb_Api.Controllers
             _env = env;
             _appSettings = appSettings.Value;
         }
+        
         [HttpPost("ConfirmEmail")]
         public async Task<IActionResult> ConfirmEmail([FromBody]ConfirmEmail confirmEmail)
         {
@@ -59,7 +60,7 @@ namespace DailyReportWeb_Api.Controllers
             }
             return Ok();
         }
-
+        
        [HttpPost("RegisterUser")]
        public async Task<IActionResult> RegisterUser([FromBody]UserSignUp model)
         {
@@ -178,7 +179,7 @@ namespace DailyReportWeb_Api.Controllers
             if (applicationUser == null) return BadRequest($"User Not Registred With this Email: {resendEmail.Email}");
             var code = await _userManager.GenerateEmailConfirmationTokenAsync(applicationUser.Result);
             code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
-            var callbackUrl = Url.Content("http://localhost:4200/confirmemail/?" + "UserId=" + applicationUser.Result.Id + "&code=" + code);
+            var callbackUrl = Url.Content("http://localhost:4200/confirmemail/?"+ "UserId=" + applicationUser.Result.Id + "&code=" + code);
             var pathToFile = _env.ContentRootPath + Path.DirectorySeparatorChar.ToString() + "Templates"
                        + Path.DirectorySeparatorChar.ToString()
                        + "EmailTemplate"

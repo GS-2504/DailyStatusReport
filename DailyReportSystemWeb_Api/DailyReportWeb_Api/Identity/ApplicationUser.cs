@@ -12,6 +12,9 @@ namespace DailyReportWeb_Api.Identity
     {  
         [NotMapped]
         public string Role { get; set; }
+        public int OrganizationId { get; set; }
+        [ForeignKey("OrganizationId")]
+        public Organization Organization { get; set;}
         public virtual ICollection<UserTask> Tasks { get; set; }
     }
 }
