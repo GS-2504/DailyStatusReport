@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 namespace DailyReportWeb_Api.Utility
 {   
     //Roles
-    public class SD
+    public class StandardRoles
     {
         public const string Role_Admin = "SuperAdmin";
         public const string Role_Organization = "OrganizationAdmin";

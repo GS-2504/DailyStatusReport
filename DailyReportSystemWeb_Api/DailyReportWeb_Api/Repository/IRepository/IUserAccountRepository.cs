@@ -8,7 +8,11 @@ namespace DailyReportWeb_Api.Repository.IRepository
 {
    public interface IUserAccountRepository
    {
-        void CreateUser(UserSignUp userSignup);
-
+         string SignInUser(UserSignIn userSignIn);
+         Task<bool> SignUpUser(UserSignUp userSignUp);
+         bool ResendEmailToUser(ResendEmail resendEmail);
+         bool SendForgotPasswordEmailToUser(ForgotPassword forgotPassword);
+         bool ResetUserPassword(ResetPassword resetPassword);
+         bool ConfirmUserEmail(ConfirmEmail confirmEmail);
    }
 }

@@ -1,12 +1,13 @@
 using DailyReportWeb_Api.DTOMapping;
 using DailyReportWeb_Api.Identity;
+using DailyReportWeb_Api.Repository;
+using DailyReportWeb_Api.Repository.IRepository;
 using DailyReportWeb_Api.Utility;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -39,7 +40,7 @@ namespace DailyReportWeb_Api
                 b => b.MigrationsAssembly("DailyReportWeb_Api")));
             //services.AddControllers();
             services.Configure<EmailSettings>(Configuration.GetSection("EmailSettings"));
-            services.AddTransient<IEmailSender, EmailSender>();
+            services.AddTransient<IEmailSender, EmailSender1>();
             services.AddTransient<IRoleStore<ApplicationRole>, ApplicationRoleStore>();
             services.AddTransient<UserManager<ApplicationUser>, ApplicationUserManager>();
             services.AddTransient<SignInManager<ApplicationUser>, ApplicationSignInManager>();
@@ -55,6 +56,8 @@ namespace DailyReportWeb_Api
             services.AddScoped<ApplicationRoleStore>();
             services.AddScoped<ApplicationUserStore>();
             services.AddControllers();
+            services.AddScoped<IOragnizationRepository, OragnizationRepository>();
+            services.AddScoped<IUserAccountRepository, UserAccountRepository>();
             services.AddAutoMapper(typeof(MappingProfile));
             services.AddSwaggerGen(c =>
             {

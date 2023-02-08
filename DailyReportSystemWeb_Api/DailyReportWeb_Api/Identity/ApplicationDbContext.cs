@@ -14,9 +14,21 @@ namespace DailyReportWeb_Api.Identity
         {
 
         }
+        /// <summary>
+        /// A DbSet of UserTask entities.
+        /// </summary>
         public DbSet<UserTask> UserTask { get; set; }
+
+        /// <summary>
+        /// A DbSet of ApplicationRole entities.
+        /// </summary>
         public DbSet<ApplicationRole> ApplicationRoles { get; set; }
+
+        /// <summary>
+        /// A DbSet of Organization entities.
+        /// </summary>
         public DbSet<Organization> Organizations { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);

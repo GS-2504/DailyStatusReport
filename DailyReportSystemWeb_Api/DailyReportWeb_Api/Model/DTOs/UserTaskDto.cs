@@ -20,7 +20,6 @@ namespace DailyReportWeb_Api.Model.DTOs
         public string Obstacle { get; set; }
         [Required]
         public string NextDayPlan { get; set; }
-        //public bool IsDeleted { get; set; } = false;
         [Required]
         public string UserId { get; set; }
         //public enum Status { Pending, Approved, Disapproved }
